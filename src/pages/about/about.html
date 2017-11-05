@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      All Orders
+    </ion-title>
+    <ion-icon name="settings" class="settings-icon" (click)="openPopoverMenu()"></ion-icon>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-refresher (ionRefresh)="loadData($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown"
+                           pullingText="Pull to refresh">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list no-lines>
+
+    <ng-container *ngIf="!(dates && dates.length)">
+      <ion-list-header>No Orders</ion-list-header>
+    </ng-container>
+
+    <div *ngFor="let date of dates; let i = index;" ion-item class="no-padding">
+
+      <ion-list-header (click)="toggleDateVisibility(i)" class="bold">
+        <ion-icon name="md-calendar"></ion-icon>
+        {{ date.date | date : 'mediumDate' }}
+      </ion-list-header>
+
+      <div [style.height]="date.isVisible ? 'auto' : '0'">
+        <order *ngFor="let order of date.orders; let j = index"
+               [order]="order" [rank]="date.orders.length - j" [colors]="colors"
+               (onVisible)="toggleOrderVisibility(i, j)">
+        </order>
+      </div>
+
+    </div>
+
+  </ion-list>
+</ion-content>

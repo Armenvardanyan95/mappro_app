@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar hideBackButton="true">
+    <ion-title>
+      Today's orders
+      <br/> &lt;&lt;{{ date | date : 'mediumDate' }}&gt;&gt;
+    </ion-title>
+    <ion-icon name="settings" class="settings-icon" (click)="openPopoverMenu()"></ion-icon>
+  </ion-navbar>
+</ion-header>
+<ion-content padding class="near-navbar">
+  <ion-refresher (ionRefresh)="loadData($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown"
+                           pullingText="Pull to refresh">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list no-lines>
+    <ng-container *ngIf="!(orders && orders.length)">
+      <ion-list-header>No Orders</ion-list-header>
+    </ng-container>
+    <order *ngFor="let order of orders; let i = index"
+           [order]="order" [rank]="orders.length - i" [colors]="colors"
+           (onVisible)="toggleOrderVisibility(i)">
+    </order>
+  </ion-list>
+
+</ion-content>

@@ -1,0 +1,25 @@
+page-home {
+
+  .settings-icon {
+    float: right;
+    font-size: 23px;
+    padding-right: 5px;
+  }
+
+}
+
+.transparent {
+  background-color: transparent !important;
+}
+
+.openable {
+  transition: height 500ms;
+}
+
+ion-list {
+  margin: 0 !important;
+}
+
+/deep/.item-inner {
+  margin: 2px !important;
+}

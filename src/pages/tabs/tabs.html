@@ -1,0 +1,5 @@
+<page-login *ngIf="!isAuth"></page-login>
+<ion-tabs *ngIf="isAuth">
+  <ion-tab [root]="home" tabTitle="Today's Orders" tabIcon="checkmark"></ion-tab>
+  <ion-tab [root]="about" tabTitle="Your All Orders" tabIcon="book"></ion-tab>
+</ion-tabs>

@@ -1,0 +1,40 @@
+<div ion-item class="no-padding">
+  <ion-list-header (click)="toggleOrderVisibility(order)"
+                   [style.background-color]="order.colorMarkerDetails.color" style="color: white" text-wrap>
+          <span style="color: #2d2d2d; background-color: white; width: auto; padding: 4px; border-radius: 4px">
+            <span style="font-size: 17px; font-weight: bolder">{{ rank }}</span> {{ order.name }}
+          </span>
+  </ion-list-header>
+  <div [ngClass]="{'open': order.isVisible, 'closed': !order.isVisible}" class="openable" [style.background-color]="makeRGBWithAlpha(order.colorMarkerDetails.color)">
+    <ion-list inset>
+      <div ion-item class="comment-order transparent"  text-wrap>
+        <ion-icon name="compass"></ion-icon> {{ order.address }}
+      </div>
+      <div class="comment-order transparent" *ngIf="order.mobilePhone" ion-item text-wrap>
+        <ion-icon name="call"></ion-icon> {{ order.mobilePhone }}
+      </div>
+      <div class="comment-order transparent" *ngIf="order.problem" ion-item text-wrap>
+        <ion-icon name="alert"></ion-icon>
+        {{ order.problem }}
+      </div>
+      <div class="comment-order transparent" *ngIf="order.timeFrom || order.timeTo" ion-item text-wrap>
+        <ion-icon name="time"></ion-icon>
+        {{ (order.timeFrom | timeAmPm).time }} <sup>{{ (order.timeFrom | timeAmPm).type }}</sup> <ng-container *ngIf="order.timeTo"> - {{ (order.timeTo | timeAmPm).time }} <sup>{{ (order.timeTo | timeAmPm).type }}</sup></ng-container>
+      </div>
+      <div class="comment-order transparent" *ngIf="order.comment" ion-item text-wrap>
+        <ion-icon name="text"></ion-icon>
+        {{ order.comment }}
+      </div>
+      <div ion-item class="comment-order transparent">
+        <ion-select placeholder="Colors" (click)="setColorsOnOptions()" [(ngModel)]="order.colorMarkerDetails.id" (ngModelChange)="changeOrderColor(order)">
+          <div #colorSelect>
+            <ion-option *ngFor="let color of colors" [value]="color.id" [ngStyle]="{ backgroundColor: color.color }">
+              {{ color.name }}
+            </ion-option>
+          </div>
+        </ion-select>
+      </div>
+
+    </ion-list>
+  </div>
+</div>
