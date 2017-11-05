@@ -21,7 +21,7 @@ export class OrderService {
 
   getTodayOrders(): Observable<IOrder[]> {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
-      return this.http.get('http://127.0.0.1:8000/today/', request).map(res => res.json());
+      return this.http.get('http://mappro.vioo.xyz:8000/today/', request).map(res => res.json());
     }))
       .flatMap(e => e)
       .switchMap((orders: IOrder[]) => orders)
@@ -31,7 +31,7 @@ export class OrderService {
 
   changeOrderColor(orderID: number, colorID: number): Observable<any> {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
-      return this.http.post(`http://127.0.0.1:8000/my-orders/`, {
+      return this.http.post(`http://mappro.vioo.xyz:8000/my-orders/`, {
         order: orderID,
         color: colorID
       }, request).map(res => res.json());
@@ -41,7 +41,7 @@ export class OrderService {
 
   filterMyOrders(): Observable<any> {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
-      return this.http.get(`http://127.0.0.1:8000/my-orders`, request)
+      return this.http.get(`http://mappro.vioo.xyz:8000/my-orders`, request)
         .map(res => res.json())
         .map((res: IOrder[]) => {
           const finalArray: {date: any, orders: IOrder[], isVisible: boolean}[] = [];

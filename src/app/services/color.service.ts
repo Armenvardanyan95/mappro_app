@@ -21,7 +21,7 @@ export class ColorService {
 
   getAll(): Observable<any> {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
-      return this.http.get('http://127.0.0.1:8000/colors/', request).map(res => res.json());
+      return this.http.get('http://mappro.vioo.xyz:8000/colors/', request).map(res => res.json());
     }))
       .flatMap(e => e);
   }

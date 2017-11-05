@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class AuthService {
 
-  private baseAuthUrl: string = 'http://127.0.0.1:8000/api-token-auth/';
+  private baseAuthUrl: string = 'http://mappro.vioo.xyz:8000/api-token-auth/';
   public authChanged: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private http: Http) {
