@@ -41,7 +41,7 @@ export class OrderService {
 
   filterMyOrders(): Observable<any> {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
-      return this.http.get(`http://mappro.vioo.xyz:8000/my-orders`, request)
+      return this.http.get(`http://mappro.vioo.xyz:8000/my-orders/`, request)
         .map(res => res.json())
         .map((res: IOrder[]) => {
           const finalArray: {date: any, orders: IOrder[], isVisible: boolean}[] = [];
