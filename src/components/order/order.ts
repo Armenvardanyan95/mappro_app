@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ToastController, LoadingController, Loading } from 'ionic-angular';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
 
 import { OrderService } from '../../app/services/order.service';
 
 @Component({
   selector: 'order',
-  templateUrl: 'order.html'
+  templateUrl: 'order.html',
+  providers: [LaunchNavigator]
 })
 export class OrderComponent {
 
@@ -15,7 +17,8 @@ export class OrderComponent {
   @Output() onVisible: EventEmitter<boolean> = new EventEmitter();
 
 
-  constructor(private orderService: OrderService, private toastCtrl: ToastController, private loadingCtrl: LoadingController) { }
+  constructor(private orderService: OrderService, private toastCtrl: ToastController,
+              private loadingCtrl: LoadingController, private navigator: LaunchNavigator) { }
 
   public makeRGBWithAlpha(hex: string): string {
     const rgb = this.hexToRgb(hex);
@@ -70,6 +73,10 @@ export class OrderComponent {
   toggleOrderVisibility(): void {
     this.order.isVisible = !this.order.isVisible;
     this.onVisible.emit(this.order.isVisible);
+  }
+
+  launchNavigator(): void {
+    this.navigator.navigate(this.order.address);
   }
 
 }
