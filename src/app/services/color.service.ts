@@ -21,7 +21,7 @@ export class ColorService {
 
   getAll(): Observable<any> {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
-      return this.http.get('https://mappro-196717.appspot.com/', request).map(res => res.json());
+      return this.http.get('https://mappro-196717.appspot.com/colors/', request).map(res => res.json());
     }))
       .flatMap(e => e);
   }
