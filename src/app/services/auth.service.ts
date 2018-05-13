@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class AuthService {
 
-  private baseAuthUrl: string = 'https://mappro-196717.appspot.com/api-token-auth/';
+  private baseAuthUrl: string = 'https://mappro.herokuapp.com/api-token-auth/';
   public authChanged: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private http: Http) {
