@@ -13,6 +13,7 @@
       </div>
       <div class="comment-order transparent" *ngIf="order.mobilePhone" ion-item text-wrap>
         <ion-icon name="call"></ion-icon> {{ order.mobilePhone }}
+        <br/><a (click)="call()">Call</a>
       </div>
       <div class="comment-order transparent" *ngIf="order.problem" ion-item text-wrap>
         <ion-icon name="alert"></ion-icon>

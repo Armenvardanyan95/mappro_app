@@ -1,13 +1,14 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ToastController, LoadingController, Loading } from 'ionic-angular';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator';
+import { CallNumber } from '@ionic-native/call-number';
 
 import { OrderService } from '../../app/services/order.service';
 
 @Component({
   selector: 'order',
   templateUrl: 'order.html',
-  providers: [LaunchNavigator]
+  providers: [LaunchNavigator, CallNumber]
 })
 export class OrderComponent {
 
@@ -17,7 +18,7 @@ export class OrderComponent {
   @Output() onVisible: EventEmitter<boolean> = new EventEmitter();
 
 
-  constructor(private orderService: OrderService, private toastCtrl: ToastController,
+  constructor(private orderService: OrderService, private toastCtrl: ToastController, private callNumber: CallNumber,
               private loadingCtrl: LoadingController, private navigator: LaunchNavigator) { }
 
   public makeRGBWithAlpha(hex: string): string {
@@ -77,6 +78,10 @@ export class OrderComponent {
 
   launchNavigator(): void {
     this.navigator.navigate(this.order.address);
+  }
+
+  call(): void {
+    this.callNumber.callNumber(this.order.mobilePhone, true);
   }
 
 }
