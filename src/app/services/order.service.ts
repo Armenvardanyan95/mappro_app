@@ -19,14 +19,47 @@ export class OrderService {
 
   }
 
+  private groupBy<T extends IOrder>(list: Array<T>, keyGetter): Array<any> {
+    const map: Map<string, T[]> = new Map();
+    list.forEach((item) => {
+      const key = keyGetter(item);
+      const collection = map.get(key);
+      if (!collection) {
+        map.set(key, [item]);
+      } else {
+        collection.push(item);
+      }
+    });
+    const retarr = [];
+
+    map.forEach((value, key) => {
+      retarr.push({date: key, orders: value.sort((order1: IOrder, order2: IOrder) => this.compareTimes(order1.timeTo, order2.timeTo))})
+    });
+
+    return retarr;
+  }
+
+  private compareTimes(t1: string, t2: string): 1 | -1 | 0 {
+    if (!t1 || !t2) return 0;
+    const {0: hours1, 1: minutes1} = t1.split(':').map(n => +n);
+    const {0: hours2, 1: minutes2} = t2.split(':').map(n => +n);
+
+    if (hours1 > hours2) return 1;
+    if (hours1 < hours2) return -1;
+    if (hours1 === hours2 && minutes1 > minutes2) return 1;
+    if (hours1 === hours2 && minutes1 < minutes2) return -1;
+    return 0;
+  }
+
   getTodayOrders(): Observable<IOrder[]> {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
       return this.http.get('https://mappro.herokuapp.com/today/', request).map(res => res.json());
     }))
       .flatMap(e => e)
       .switchMap((orders: IOrder[]) => orders)
-      .map((order: IOrder) => {return {...order, isVisible: false }})
-      .toArray();
+      .map((order: IOrder) => ({...order, isVisible: false }))
+      .toArray()
+      .map(orders => orders.sort((order1, order2) => this.compareTimes(order1.timeTo, order2.timeTo)))
   }
 
   changeOrderColor(orderID: number, colorID: number): Observable<any> {
@@ -43,19 +76,7 @@ export class OrderService {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
       return this.http.get(`https://mappro.herokuapp.com/my-orders/`, request)
         .map(res => res.json())
-        .map((res: IOrder[]) => {
-          const finalArray: {date: any, orders: IOrder[], isVisible: boolean}[] = [];
-          res.forEach((order: IOrder) => {
-            const matchingDates: any[] = finalArray.filter((day) => day.date == order.date).map(day => day.date);
-            if (matchingDates.length) {
-              const index: number = matchingDates.indexOf(order.date);
-              finalArray[index].orders.push(order);
-            } else {
-              finalArray.push({date: order.date, orders: [order], isVisible: false});
-            }
-          });
-          return finalArray;
-        });
+        .map((res: IOrder[]) => this.groupBy(res, order => order.date));
     }))
       .flatMap(e => e);
   }
