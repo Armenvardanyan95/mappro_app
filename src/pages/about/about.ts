@@ -49,25 +49,20 @@ export class AboutPage {
     this.loadData();
   }
 
-  public loadData(refresher?): void {
-    if (refresher) {
-      this.orderService.filterMyOrders(this.dateRange).subscribe(res => {
-        this.dates = res;
-        refresher.complete();
-      });
+  public loadData(): void {
+    if (!(this.colors && this.colors.length)) {
       this.colorService.getAll().subscribe(colors => this.colors = colors);
-    } else {
-      if (!(this.dates && this.dates.length)) {
-        const loading: Loading = this.loadingCtrl.create();
-        loading.present();
-        this.orderService.filterMyOrders(this.dateRange).do(() => loading.dismiss()).subscribe(
-          res => this.dates = res,
-          () => loading.dismiss()
-        );
-      }
-      if (!(this.colors && this.colors.length)) {
-        this.colorService.getAll().subscribe(colors => this.colors = colors);
-      }
+    }
+  }
+
+  searchForOrders(): void {
+    if (this.dateRange.dateFrom && this.dateRange.dateTo) {
+      const loading: Loading = this.loadingCtrl.create();
+      loading.present();
+      this.orderService.filterMyOrders(this.dateRange).do(() => loading.dismiss()).subscribe(
+        res => this.dates = res,
+        () => loading.dismiss()
+      );
     }
   }
 

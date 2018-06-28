@@ -17,15 +17,20 @@
 
   <ion-list no-lines>
 
-    <ng-container *ngIf="!(dates && dates.length)">
-      <ion-list-header>No Orders</ion-list-header>
-    </ng-container>
-
     <div>
       <button ion-button (click)="chooseDate('dateFrom')">Date From</button>
       <button ion-button (click)="chooseDate('dateTo')">Date To</button>
-      <button ion-button label="" [disabled]="!dateRange.dateTo || !dateRange.dateFrom">Search</button>
+      <button ion-button (click)="searchForOrders()" [disabled]="!dateRange.dateTo || !dateRange.dateFrom">Search</button>
     </div>
+
+    <div>
+      <p>Date From: {{ dateRange.dateFrom | date : 'mediumDate'}}</p>
+      <p>Date From: {{ dateRange.dateTo | date : 'mediumDate'}}</p>
+    </div>
+
+    <ng-container *ngIf="!(dates || dates.length)">
+      <ion-list-header>No Orders for selected dates</ion-list-header>
+    </ng-container>
 
     <div *ngFor="let date of dates; let i = index;" ion-item class="no-padding">
 
