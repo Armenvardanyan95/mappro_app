@@ -36,6 +36,8 @@ export class OrderService {
       retarr.push({date: key, orders: value.sort((order1: IOrder, order2: IOrder) => this.compareTimes(order1.timeTo, order2.timeTo))})
     });
 
+    const final = retarr.sort((a: IOrder, b: IOrder) => (new Date(b.date)).valueOf() - (new Date(a.date)).valueOf());
+
     return retarr;
   }
 
