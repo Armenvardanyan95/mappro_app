@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ActionSheet, ActionSheetController, Loading, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { DatePicker } from '@ionic-native/date-picker';
 import {Login} from "../login/login";
 import { OrderService } from '../../app/services/order.service';
 import { ColorService } from '../../app/services/color.service';
@@ -10,15 +11,17 @@ const storage: Storage = new Storage();
 
 @Component({
   selector: 'page-about',
-  templateUrl: 'about.html'
+  templateUrl: 'about.html',
+  providers: [DatePicker]
 })
 export class AboutPage {
 
   colors: IColorMarker[] = [];
   dates: {date: any, orders: IOrder[], isVisible: boolean}[] = [];
+  dateRange: {dateFrom, dateTo} = {dateFrom: '', dateTo: ''};
 
   constructor(public navCtrl: NavController, private actionSheetController: ActionSheetController, private loadingCtrl: LoadingController,
-              private colorService: ColorService, private orderService: OrderService) {
+              private colorService: ColorService, private orderService: OrderService, private datePicker: DatePicker) {
 
   }
 
@@ -32,13 +35,23 @@ export class AboutPage {
     });
   }
 
+  public chooseDate(dateType: 'dateTo' | 'dateFrom'): void {
+    this.datePicker.show({
+      date: new Date(),
+      mode: 'date'
+    }).then(
+      date => this.dateRange[dateType] = date.toISOString(),
+      err => console.log('Error occurred while getting date: ', err)
+    );
+  }
+
   public ionViewDidEnter() {
     this.loadData();
   }
 
   public loadData(refresher?): void {
     if (refresher) {
-      this.orderService.filterMyOrders().subscribe(res => {
+      this.orderService.filterMyOrders(this.dateRange).subscribe(res => {
         this.dates = res;
         refresher.complete();
       });
@@ -47,7 +60,7 @@ export class AboutPage {
       if (!(this.dates && this.dates.length)) {
         const loading: Loading = this.loadingCtrl.create();
         loading.present();
-        this.orderService.filterMyOrders().do(() => loading.dismiss()).subscribe(
+        this.orderService.filterMyOrders(this.dateRange).do(() => loading.dismiss()).subscribe(
           res => this.dates = res,
           () => loading.dismiss()
         );

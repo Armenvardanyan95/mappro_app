@@ -21,6 +21,12 @@
       <ion-list-header>No Orders</ion-list-header>
     </ng-container>
 
+    <div>
+      <button ion-button (click)="chooseDate('dateFrom')">Date From</button>
+      <button ion-button (click)="chooseDate('dateTo')">Date To</button>
+      <button ion-button label="" [disabled]="!dateRange.dateTo || !dateRange.dateFrom">Search</button>
+    </div>
+
     <div *ngFor="let date of dates; let i = index;" ion-item class="no-padding">
 
       <ion-list-header (click)="toggleDateVisibility(i)" class="bold">

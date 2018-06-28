@@ -72,9 +72,9 @@ export class OrderService {
       .flatMap(e => e);
   }
 
-  filterMyOrders(): Observable<any> {
+  filterMyOrders({dateFrom, dateTo}): Observable<any> {
     return Observable.fromPromise(this.makeRequestOptions.then((request: RequestOptions) => {
-      return this.http.get(`https://mappro.herokuapp.com/my-orders/`, request)
+      return this.http.post(`https://mappro.herokuapp.com/mobile/order-by-date`, {dateFrom, dateTo}, request)
         .map(res => res.json())
         .map((res: IOrder[]) => this.groupBy(res, order => order.date));
     }))
