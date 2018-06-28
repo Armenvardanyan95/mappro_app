@@ -25,7 +25,7 @@
 
     <div>
       <p>Date From: {{ dateRange.dateFrom | date : 'mediumDate'}}</p>
-      <p>Date From: {{ dateRange.dateTo | date : 'mediumDate'}}</p>
+      <p>Date To: {{ dateRange.dateTo | date : 'mediumDate'}}</p>
     </div>
 
     <ng-container *ngIf="!(dates || dates.length)">
